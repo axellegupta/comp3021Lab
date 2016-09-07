@@ -1,5 +1,7 @@
 # comp3021Lab
 Java Programming Practice Source Codes
+Your github account has been successfully linked to your identity
 
-Akanksha GUPTA 20154675
-______________________
+If you wish to make this repository “private” you can request a free student developer pack at
+
+https://education.github.com/pack
