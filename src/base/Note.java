@@ -1,6 +1,5 @@
 package base;
 
-import java.util.Collections;
 import java.util.Date;
 
 public class Note implements Comparable<Note>{
