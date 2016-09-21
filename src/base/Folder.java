@@ -86,7 +86,7 @@ public class Folder implements Comparable<Folder>{
 		int j= 1;
 		s[0]=given[0];
 		for(int i = 1 ; i<given.length; ++i){
-			if (given[i].equalsIgnoreCase("or")){
+			if (given[i].toLowerCase().equalsIgnoreCase("or")){
 				s[j-1] = "("+s[j-1];
 				s[j] = " || ";
 				j=j+1;}
@@ -104,7 +104,6 @@ public class Folder implements Comparable<Folder>{
 			finals.concat(s0);
 		}
 		
-			
 			for (Note n: notes){
 				if(n.getTitle().toLowerCase().contains(finals.toLowerCase())){
 					newNotes.add(n);
