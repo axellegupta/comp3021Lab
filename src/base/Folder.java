@@ -88,14 +88,14 @@ public class Folder implements Comparable<Folder>{
 		for(int i = 1 ; i<given.length; ++i){
 			if (given[i].equalsIgnoreCase("or")){
 				s[j-1] = "("+s[j-1];
-				s[j] = "||";
+				s[j] = " || ";
 				j=j+1;}
 			else if(given[i-1].equalsIgnoreCase("or")){
 				s[j] = given[i];
-				s[j+1]=")";	
+				s[j+1]=" ) ";	
 				j=j+2;}				
 			else {
-				s[j] = "&&";
+				s[j] = " && ";
 				s[j+1]= given[i];	
 				j=j+2;}
 		}
