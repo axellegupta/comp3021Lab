@@ -81,22 +81,36 @@ public class Folder implements Comparable<Folder>{
 		
 		ArrayList<Note> newNotes = new ArrayList<Note>();
 		String[] given = Keywords.split(" ");
-		String[] s;
-		s[0] = given[0];		
-		
-		for(int i = 0 ; i<given.length; ++i){
-			if (given[i].equalsIgnoreCase("or"))
-				s[i] = " || ";
-			else
-				s[i] = "&& ";			
+		String[] s = new String[given.length+3];
+		String finals = "";
+		int j= 1;
+		s[0]=given[0];
+		for(int i = 1 ; i<given.length; ++i){
+			if (given[i].equalsIgnoreCase("or")){
+				s[j-1] = "("+s[j-1];
+				s[j] = "||";
+				j=j+1;}
+			else if(given[i-1].equalsIgnoreCase("or")){
+				s[j] = given[i];
+				s[j+1]=")";	
+				j=j+2;}				
+			else {
+				s[j] = "&&";
+				s[j+1]= given[i];	
+				j=j+2;}
 		}
+		
+		for(String s0: s){
+			finals.concat(s0);
+		}
+		
 			
 			for (Note n: notes){
-				if(n.getTitle().toLowerCase().contains(s.toLowerCase())){
+				if(n.getTitle().toLowerCase().contains(finals.toLowerCase())){
 					newNotes.add(n);
 				}
 				else if(n instanceof TextNote){
-					if (((TextNote) n).getContent().toLowerCase().contains(s.toLowerCase())){
+					if (((TextNote) n).getContent().toLowerCase().contains(finals.toLowerCase())){
 						newNotes.add(n);
 					}
 					

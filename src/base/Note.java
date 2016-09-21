@@ -64,4 +64,8 @@ public class Note implements Comparable<Note>{
 			return -1;
 	}
 	
+	public String toString(){
+		return date.toString()+"\t"+title;
+		
+	}
 }
