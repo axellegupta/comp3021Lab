@@ -81,7 +81,7 @@ public class Folder implements Comparable<Folder>{
 		
 		ArrayList<Note> newNotes = new ArrayList<Note>();
 		String[] given = Keywords.split(" ");
-		String[] s = new String[given.length+3];
+		String[] s = new String[2*given.length];
 		String finals = "";
 		int j= 1;
 		s[0]=given[0];
@@ -99,7 +99,10 @@ public class Folder implements Comparable<Folder>{
 				s[j+1]= given[i];	
 				j=j+2;}
 		}
-		
+		for(int i = j; i<2*given.length;++i)
+		{
+			s[i] = " ";
+		}
 		for(String s0: s){
 			finals.concat(s0);
 		}
