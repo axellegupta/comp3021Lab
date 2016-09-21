@@ -1,8 +1,10 @@
 package base;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class Folder {
+public class Folder implements Comparable<Folder>{
 	
 	private ArrayList<Note> notes; 
 	private String name;
@@ -60,7 +62,47 @@ public class Folder {
 			return false;
 		return true;
 	}
+
+	@Override
+	public int compareTo(Folder o) {
+		if (this.name.length()==o.getName().length())
+			return 0;
+		else if(this.name.length()>o.getName().length())
+			return 1;
+		else
+			return -1;
+	}
 	
+	public void sortNotes(){
+		Collections.sort(notes);
+	}
 	
-	
+	public List<Note> searchNotes(String Keywords){
+		
+		ArrayList<Note> newNotes = new ArrayList<Note>();
+		String[] given = Keywords.split(" ");
+		String[] s;
+		s[0] = given[0];		
+		
+		for(int i = 0 ; i<given.length; ++i){
+			if (given[i].equalsIgnoreCase("or"))
+				s[i] = " || ";
+			else
+				s[i] = "&& ";			
+		}
+			
+			for (Note n: notes){
+				if(n.getTitle().toLowerCase().contains(s.toLowerCase())){
+					newNotes.add(n);
+				}
+				else if(n instanceof TextNote){
+					if (((TextNote) n).getContent().toLowerCase().contains(s.toLowerCase())){
+						newNotes.add(n);
+					}
+					
+				}
+			}
+		return newNotes;
+		
+	}
 }

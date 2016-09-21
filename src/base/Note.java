@@ -1,8 +1,9 @@
 package base;
 
+import java.util.Collections;
 import java.util.Date;
 
-public class Note {
+public class Note implements Comparable<Note>{
 	private Date date;
 	private String title;
 	
@@ -13,6 +14,10 @@ public class Note {
 	
 	public String getTitle(){
 		return this.title;
+	}
+	
+	public Date getDate(){
+		return this.date;
 	}
 
 	/* (non-Javadoc)
@@ -46,6 +51,17 @@ public class Note {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public int compareTo(Note o) {
+		int compare = o.getDate().compareTo(this.date);
+		
+		if (compare==0)
+			return 0;
+		else if(compare>0)
+			return 1;
+		else
+			return -1;
+	}
 	
 }
