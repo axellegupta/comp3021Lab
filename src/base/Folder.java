@@ -65,12 +65,8 @@ public class Folder implements Comparable<Folder>{
 
 	@Override
 	public int compareTo(Folder o) {
-		if (this.name.length()==o.getName().length())
-			return 0;
-		else if(this.name.length()>o.getName().length())
-			return 1;
-		else
-			return -1;
+
+		return this.name.compareTo(o.getName());
 	}
 	
 	public void sortNotes(){

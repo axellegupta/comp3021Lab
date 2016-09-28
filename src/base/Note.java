@@ -55,12 +55,7 @@ public class Note implements Comparable<Note>{
 	public int compareTo(Note o) {
 		int compare = o.getDate().compareTo(this.date);
 		
-		if (compare==0)
-			return 0;
-		else if(compare>0)
-			return 1;
-		else
-			return -1;
+		return compare;
 	}
 	
 	public String toString(){
