@@ -4,12 +4,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NoteBook implements Serializable{
+public class NoteBook implements java.io.Serializable{
 	/**
 	 * 
 	 */
@@ -20,18 +19,20 @@ public class NoteBook implements Serializable{
 	}
 	public NoteBook(String file){
 
+		NoteBook n = null;
 		FileInputStream fis =null;
 		ObjectInputStream in = null;
 		try{
 			fis=new FileInputStream(file);
 			in=new ObjectInputStream(fis);
-			NoteBook n =(NoteBook) in.readObject();
+			n =(NoteBook)in.readObject();
 			in.close();
-			this.folders = n.getFolders();
 		}
 		catch(Exception e){
-			System.out.println(e.getMessage());
-		}
+			e.printStackTrace();
+		}			
+		this.folders = n.folders;
+
 	}
 	private boolean insertNote(String folderName, Note note) { 
 		Folder f = null; 
@@ -102,17 +103,17 @@ public class NoteBook implements Serializable{
 	}
 
 	public boolean save(String file){
-		NoteBook object = new NoteBook();
 		FileOutputStream fos = null;
 		ObjectOutputStream out=null;
 		try{
 			fos=new FileOutputStream(file);
 			out=new ObjectOutputStream(fos);
-			out.writeObject(object);
+			out.writeObject(this);
 			out.close();
 		}
 		catch(Exception e){
 			e.printStackTrace();
+			
 		}
 		return true;
 	}
