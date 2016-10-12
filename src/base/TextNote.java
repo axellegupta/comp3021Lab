@@ -20,7 +20,7 @@ public class TextNote extends Note implements Serializable {
 	public TextNote(String title, String content) {
 		super(title);
 		this.content=content;
-		
+
 	}
 	public String getContent() {
 		return content;
@@ -28,12 +28,12 @@ public class TextNote extends Note implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
 	public TextNote(File f) {
 		super(f.getName());
 		this.content = getTextFromFile(f.getAbsolutePath());
 	}
-	
+
 	private String getTextFromFile(String absolutePath){
 		StringBuffer result = new StringBuffer("");
 		File file = new File(absolutePath);
@@ -61,7 +61,7 @@ public class TextNote extends Note implements Serializable {
 
 		return result.toString();
 	}
-	
+
 	public void exportTextToFile(String pathFolder){
 		String title = this.getTitle().replaceAll(" ","_");
 		File file = new File(pathFolder + title + ".txt");
@@ -76,7 +76,7 @@ public class TextNote extends Note implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Character countLetters(){
 		HashMap<Character,Integer> count = new HashMap<Character,Integer>();
 		String a = this.getTitle() + this.getContent();
@@ -90,10 +90,10 @@ public class TextNote extends Note implements Serializable {
 					count.put(c, 1); // maps value 1 to key c
 				} else {
 					count.put(c, count.get(c) + 1); // increments value mapped to key c
-					if (count.get(c) > b) { // checks if value of c if greater that b, the temporary greatest value
-						b = count.get(c); // updates b to that value
-						r = c; // updates r to the first letter with max freq
-					}
+				}
+				if (count.get(c) > b) { // checks if value of c if greater that b, the temporary greatest value
+					b = count.get(c); // updates b to that value
+					r = c; // updates r to the first letter with max freq
 				}
 			}
 		}

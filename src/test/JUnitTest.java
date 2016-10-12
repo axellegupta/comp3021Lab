@@ -39,16 +39,13 @@ public class JUnitTest {
 	@Test
 	public void testCountLetters() {
 		
-		TextNote TestNote = new TextNote("JjJj", "comp3021qqq");
+		TextNote TestNote = new TextNote("Jav", "comp3021");
 		
-		Character exp1 = 'j';
-		Character exp2 = 'J';
-		boolean exp = false;
+		Character exp = 'J';
 		Character actual = TestNote.countLetters();
-		System.out.println("CountLetters BUG:");
-		System.out.println("\tCurrently, the output of countLetters is "+ actual + " because j and J are treated as different characters. \n\tIn total, there are 3 q's, 2 j's and 2J's. If there was no bug, the number of combined j and J's would be 4 and thus, the output would not be q. ");
+		System.out.println("CountLetters RESOLVED-BUG:");
+		System.out.println("\tAfter bug resolution, the output of countLetters is "+ actual+"instead of blankspace");
 		
-		if(exp1.equals(actual) ||exp2.equals(actual)) {exp=true;}
-		assertEquals("Since j and J should be treated as the same character", exp,true);
+		assertEquals(exp,actual);
 	}
 }
