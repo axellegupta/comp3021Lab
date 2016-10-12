@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Note implements Comparable<Note>, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Date date;
 	private String title;
 	
@@ -20,21 +24,16 @@ public class Note implements Comparable<Note>, Serializable{
 		return this.date;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-//		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

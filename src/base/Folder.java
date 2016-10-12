@@ -78,38 +78,60 @@ public class Folder implements Comparable<Folder>, Serializable{
 		Collections.sort(notes);
 	}
 
-	public boolean searchNotesOld(Note n, String Keywords){
+	public List<List<String>> makeArray(String Keywords){
 		String[] given = Keywords.split(" ");
-		boolean add = false;
-		if(n instanceof TextNote){
-			add=(((TextNote) n).getContent().toLowerCase().contains(given[0].toLowerCase())||n.getTitle().toLowerCase().contains(given[0].toLowerCase()));
-			}
-		else add = n.getTitle().toLowerCase().contains(given[0].toLowerCase());
-			
-		for(int i=1; i<given.length;++i){
-			
-			if (given[i-1].equalsIgnoreCase("or")){
-				if(add==true){continue;}
-				else {
-					if(n instanceof TextNote){
-					add= add ||(((TextNote) n).getContent().toLowerCase().contains(given[i].toLowerCase())||n.getTitle().toLowerCase().contains(given[i].toLowerCase()));
-					}
-					else add = add || n.getTitle().toLowerCase().contains(given[i].toLowerCase());
-					};
-				}
-		
-			else if (!given[i].equalsIgnoreCase("or")){
-				if(n instanceof TextNote){
-					add= add &&(((TextNote) n).getContent().toLowerCase().contains(given[i].toLowerCase())||n.getTitle().toLowerCase().contains(given[i].toLowerCase()));
-				}
-				else add = add && n.getTitle().toLowerCase().contains(given[i].toLowerCase());
+		List<List<String>> listOfLists = new ArrayList<List<String>>();
+		ArrayList<String> row = new ArrayList<String>();
+		row.add(given[0]);
+		listOfLists.add(row);
 
+		for(int i=1, j=0; i<given.length;++i){
+
+			if (i>3 && given[i-1].equalsIgnoreCase("or") && !given[i-3].equalsIgnoreCase("or"))
+			{
+				ArrayList<String> rowNew = new ArrayList<String>();
+				rowNew.add(given[i]);
+				listOfLists.add(rowNew);
+				++j;
 			}
-			else{}
+			else if (given[i-1].equalsIgnoreCase("or")){
+				listOfLists.get(j).add(given[i]);
+			}
+			else if (!given[i].equalsIgnoreCase("or"))
+			{
+				ArrayList<String> rowNew = new ArrayList<String>();
+				rowNew.add(given[i]);
+				listOfLists.add(rowNew);
+				++j;
+			}
+			else{
+				continue;
+			}
 		}
 
-		return add;
+		return listOfLists;
 
+	}
+
+	public boolean decideAddition(Note n, String Keywords){
+		List<List<String>> given = makeArray(Keywords);
+
+		for(List<String> list: given){
+			boolean temp = false;
+
+			for(int i=0; i<list.size();++i){
+
+				if(!temp){
+					if(n instanceof TextNote){
+						temp= (((TextNote) n).getContent().toLowerCase().contains(list.get(i).toLowerCase())||n.getTitle().toLowerCase().contains(list.get(i).toLowerCase()));
+					}
+					else temp = n.getTitle().toLowerCase().contains(list.get(i).toLowerCase());
+				}
+			}
+
+			if (!temp) {return false;}
+		}
+		return true;
 	}
 
 	public List<Note> searchNotes(String Keywords){
@@ -118,7 +140,7 @@ public class Folder implements Comparable<Folder>, Serializable{
 		boolean add = false;
 
 		for (Note n: notes){
-			add = searchNotesOld(n, Keywords);
+			add = decideAddition(n, Keywords);
 			if(add==true){newNotes.add(n);}
 		}
 		return newNotes;

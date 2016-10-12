@@ -43,8 +43,8 @@ public class JUnitTest {
 		
 		Character exp = 'J';
 		Character actual = TestNote.countLetters();
-		System.out.println("CountLetters RESOLVED-BUG:");
-		System.out.println("\tAfter bug resolution, the output of countLetters is "+ actual+"instead of blankspace");
+		System.out.println("countLetters RESOLVED-BUG:");
+		System.out.println("\tAfter bug resolution, the output of countLetters is \""+ actual+"\" instead of \" \"");
 		
 		assertEquals(exp,actual);
 	}
