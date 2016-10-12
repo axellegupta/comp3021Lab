@@ -84,14 +84,15 @@ public class TextNote extends Note implements Serializable {
 		Character r = ' ';
 		for (int i = 0; i < a.length(); i++) {
 			Character c = a.charAt(i);
-			if (c <= 'Z' && c >= 'A' || c <= 'z' && c >= 'a') {
-				if (!count.containsKey(c)) {
-					count.put(c, 1);
+			if (c <= 'Z' && c >= 'A' || c <= 'z' && c >= 'a') // checks if c is an alphabet
+			{
+				if (!count.containsKey(c)) { // if mappping for key c does not exist in hashmap count
+					count.put(c, 1); // maps value 1 to key c
 				} else {
-					count.put(c, count.get(c) + 1);
-					if (count.get(c) > b) {
-						b = count.get(c);
-						r = c;
+					count.put(c, count.get(c) + 1); // increments value mapped to key c
+					if (count.get(c) > b) { // checks if value of c if greater that b, the temporary greatest value
+						b = count.get(c); // updates b to that value
+						r = c; // updates r to the first letter with max freq
 					}
 				}
 			}
