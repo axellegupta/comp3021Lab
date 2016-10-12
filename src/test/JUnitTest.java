@@ -47,5 +47,13 @@ public class JUnitTest {
 		System.out.println("\tAfter bug resolution, the output of countLetters is \""+ actual+"\" instead of \" \"");
 		
 		assertEquals(exp,actual);
+		
+		TextNote TestNote1 = new TextNote("Java", "comp3021");
+		TextNote TestNote2 = new TextNote("Java", "comp30211");
+		TextNote TestNote3 = new TextNote("Javav", "comp3021");
+		exp = 'a';
+		assertEquals(exp,TestNote1.countLetters());
+		assertEquals(exp,TestNote2.countLetters());
+		assertEquals(exp,TestNote3.countLetters());
 	}
 }
