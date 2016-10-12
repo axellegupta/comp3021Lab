@@ -6,28 +6,28 @@ import java.util.Collections;
 import java.util.List;
 
 public class Folder implements Comparable<Folder>, Serializable{
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Note> notes; 
 	private String name;
-	
+
 	public Folder(String name) { 
 		this.name = name;
 		notes = new ArrayList<Note>();
-		} 
-	
+	} 
+
 	public void addNote(Note note) {notes.add(note);}
-	
+
 	public String getName(){ return this.name; } 
 	public ArrayList<Note> getNotes() { return notes; }
 	public String toString(){
 		int nText = 0; 
 		int nImage = 0; 
 		// TODO 
-		
+
 		for(Note note : notes){
 			if (note instanceof TextNote){
 				nText++;
@@ -38,13 +38,13 @@ public class Folder implements Comparable<Folder>, Serializable{
 		};
 		return name + ":" + nText + ":" + nImage;
 	}
-		
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-//		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+		//		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
 		return result;
 	}
 
@@ -73,54 +73,55 @@ public class Folder implements Comparable<Folder>, Serializable{
 
 		return this.name.compareTo(o.getName());
 	}
-	
+
 	public void sortNotes(){
 		Collections.sort(notes);
 	}
-	
-	public List<Note> searchNotes(String Keywords){
-		
-		ArrayList<Note> newNotes = new ArrayList<Note>();
+
+	public boolean searchNotesOld(Note n, String Keywords){
 		String[] given = Keywords.split(" ");
-		String[] s = new String[2*given.length];
-		String finals = "";
-		int j= 1;
-		s[0]=given[0];
-		for(int i = 1 ; i<given.length; ++i){
-			if (given[i].toLowerCase().equalsIgnoreCase("or")){
-				s[j-1] = "("+s[j-1];
-				s[j] = "||";
-				j=j+1;}
-			else if(given[i-1].equalsIgnoreCase("or")){
-				s[j] = given[i];
-				s[j+1]=")";	
-				j=j+2;}				
-			else {
-				s[j] = "&&";
-				s[j+1]= given[i];	
-				j=j+2;}
-		}
-		for(int i = j; i<2*given.length;++i)
-		{
-			s[i] = " ";
-		}
-		for(String s0: s){
-			finals.concat(s0);
-		}
-		
-//			finals = "( java || LAB ) && ( attendance || SESSION )";
-			for (Note n: notes){
-				if(n.getTitle().toLowerCase().contains(finals.toLowerCase())){
-					newNotes.add(n);
-				}
-				else if(n instanceof TextNote){
-					if (((TextNote) n).getContent().toLowerCase().contains(finals.toLowerCase())){
-						newNotes.add(n);
-					}
-					
-				}
+		boolean add = false;
+		if(n instanceof TextNote){
+			add=(((TextNote) n).getContent().toLowerCase().contains(given[0].toLowerCase())||n.getTitle().toLowerCase().contains(given[0].toLowerCase()));
 			}
-		return newNotes;
+		else add = n.getTitle().toLowerCase().contains(given[0].toLowerCase());
+			
+		for(int i=1; i<given.length;++i){
+			
+			if (given[i-1].equalsIgnoreCase("or")){
+				if(add==true){continue;}
+				else {
+					if(n instanceof TextNote){
+					add= add ||(((TextNote) n).getContent().toLowerCase().contains(given[i].toLowerCase())||n.getTitle().toLowerCase().contains(given[i].toLowerCase()));
+					}
+					else add = add || n.getTitle().toLowerCase().contains(given[i].toLowerCase());
+					};
+				}
 		
+			else if (!given[i].equalsIgnoreCase("or")){
+				if(n instanceof TextNote){
+					add= add &&(((TextNote) n).getContent().toLowerCase().contains(given[i].toLowerCase())||n.getTitle().toLowerCase().contains(given[i].toLowerCase()));
+				}
+				else add = add && n.getTitle().toLowerCase().contains(given[i].toLowerCase());
+
+			}
+			else{}
+		}
+
+		return add;
+
+	}
+
+	public List<Note> searchNotes(String Keywords){
+
+		ArrayList<Note> newNotes = new ArrayList<Note>();
+		boolean add = false;
+
+		for (Note n: notes){
+			add = searchNotesOld(n, Keywords);
+			if(add==true){newNotes.add(n);}
+		}
+		return newNotes;
+
 	}
 }
