@@ -63,6 +63,7 @@ public class NoteBookWindow extends Application {
 	 * current folder selected by the user
 	 */
 	String currentFolder = "";
+	Folder curFolder = new Folder("");
 	/**
 	 * current search string
 	 */
@@ -111,13 +112,12 @@ public class NoteBookWindow extends Application {
 		buttonSearch.setOnAction(new EventHandler<ActionEvent>() {  
 			@Override public void handle(ActionEvent event) { 
 				currentSearch = textField.getText();
-				Folder currentF = new Folder(currentFolder);
 				for(Folder f: noteBook.getFolders()){
 					if(f.getName().equals(currentFolder)){
-						currentF = f;
+						curFolder = f;
 					}
 				}
-				updateListView(currentF, true);
+				updateListView(curFolder, true);
 			}
 		});
 		
@@ -125,13 +125,12 @@ public class NoteBookWindow extends Application {
 		buttonClear.setOnAction(new EventHandler<ActionEvent>() {  
 			@Override public void handle(ActionEvent event) { 
 				currentSearch = "";
-				Folder currentF = new Folder(currentFolder);
 				for(Folder f: noteBook.getFolders()){
 					if(f.getName().equals(currentFolder)){
-						currentF = f;
+						curFolder = f;
 					}
 				}
-				updateListView(currentF, true);
+				updateListView(curFolder, true);
 			}
 		});
 
@@ -164,13 +163,12 @@ public class NoteBookWindow extends Application {
 				currentFolder = t1.toString();
 				// this contains the name of the folder selected
 				// TODO update listview
-				t1 = new Folder(currentFolder);
 				for (Folder f: noteBook.getFolders()){
 					if(f.getName().equals(currentFolder)){
-						t1 = f;
+						curFolder = f;
 					}
 				}
-				updateListView((Folder) (t1), false);
+				updateListView(curFolder, false);
 
 			}
 
@@ -190,17 +188,16 @@ public class NoteBookWindow extends Application {
 				// TODO load the content of the selected note in
 				// textAreNote
 				TextNote newNote = new TextNote(title);
-				for(Folder f: noteBook.getFolders()){
-					if(f.getName().equals(currentFolder)){
-						for (Note tNote: f.getNotes()){
-							if(tNote.getTitle().equals(title)){
-								if (tNote instanceof TextNote){
-									newNote = (TextNote) tNote;
-								}
-							}
+				
+				for (Note tNote: curFolder.getNotes()){
+					if(tNote.getTitle().equals(title)){
+						if (tNote instanceof TextNote){
+							newNote = (TextNote) tNote;
 						}
 					}
 				}
+					
+				
 				String content = newNote.getContent();
 				textAreaNote.setText(content);
 
@@ -226,7 +223,8 @@ public class NoteBookWindow extends Application {
 
 		ObservableList<String> combox2 = FXCollections.observableArrayList(list);
 		titleslistView.setItems(combox2);
-		textAreaNote.setText("");
+		if (!search){
+		textAreaNote.setText("");}
 	}
 
 	/*
