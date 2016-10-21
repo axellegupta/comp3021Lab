@@ -223,7 +223,7 @@ public class NoteBookWindow extends Application {
 
 		ObservableList<String> combox2 = FXCollections.observableArrayList(list);
 		titleslistView.setItems(combox2);
-		if (!search){
+		if (!search || (search && notes.size()==0)){
 		textAreaNote.setText("");}
 	}
 
