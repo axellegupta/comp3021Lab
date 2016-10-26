@@ -221,8 +221,6 @@ public class NoteBookWindow extends Application {
 		return hbox;
 	}
 
-		
-
 	private VBox addVBox() {
 
 		VBox vbox = new VBox();
