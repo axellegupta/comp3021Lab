@@ -82,6 +82,11 @@ public class NoteBook implements java.io.Serializable{
 		ImageNote note = new ImageNote(title); 
 		return insertNote(folderName, note);  
 	}
+	
+	public void addFolder(String folderName) {
+		Folder folder = new Folder(folderName);
+		folders.add(folder);
+		}
 
 	public ArrayList<Folder> getFolders() { return folders; }
 
