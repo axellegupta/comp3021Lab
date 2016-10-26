@@ -1,6 +1,7 @@
 package ui;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import base.Folder;
@@ -45,6 +46,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 /**
  * 
  * NoteBook GUI with JAVAFX
@@ -68,6 +71,8 @@ public class NoteBookWindow extends Application {
 	String currentFolder = "";
 
 	Folder curFolder = new Folder("");
+	
+	TextNote curNote = new TextNote("");
 
 	String currentSearch = "";
 
@@ -191,9 +196,32 @@ public class NoteBookWindow extends Application {
 		hbox.getChildren().add(buttonSearch); 
 		hbox.getChildren().add(buttonClear); 
 
-
 		return hbox;
 	}
+	
+	private HBox anotherHBox() {
+
+		HBox hbox = new HBox();
+		hbox.setPadding(new Insets(15, 12, 15, 12));
+		hbox.setSpacing(10); // Gap between nodes
+
+		ImageView saveView = new ImageView(new Image(new File("save.png").toURI().toString()));
+		saveView.setFitHeight(18);
+		saveView.setFitWidth(18);
+		saveView.setPreserveRatio(true);
+		Button saveNote = new Button("Save Note");
+		
+		ImageView delView = new ImageView(new Image(new File("file:///Users/axellegupta/Git/comp3021Lab/src/ui/delete.png").toURI().toString()));
+		delView.setFitHeight(18);
+		delView.setFitWidth(18);
+		delView.setPreserveRatio(true);
+		Button delNote = new Button("Delete Note");
+		
+		hbox.getChildren().addAll(saveView,saveNote, delView, delNote);
+		return hbox;
+	}
+
+		
 
 	private VBox addVBox() {
 
@@ -313,7 +341,65 @@ public class NoteBookWindow extends Application {
 
 
 		Button addNote = new Button("Add Note");
+		addNote.setOnAction(new EventHandler<ActionEvent>() {  
+			@Override public void handle(ActionEvent event) { 
 
+				TextInputDialog dialog = new TextInputDialog("Add a Note");
+				dialog.setTitle("Input");
+				dialog.setHeaderText("Add a new Note for your folder:");
+				dialog.setContentText("Please enter the name you want to create:");
+				//Traditional way to get the response value.
+				Optional<String> result = dialog.showAndWait();
+				if (result.isPresent()){
+					Boolean exists = false;
+					for(Note n: curFolder.getNotes()){
+						if (n.getTitle().equals(result.get()))
+						{exists = true;}
+					}
+
+					if(exists){
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("FAILED");
+						alert.setContentText(result.get()+" : Already Exists");
+						alert.showAndWait().ifPresent(rs -> {
+							if (rs == ButtonType.OK) {
+								System.out.println("Failed");
+							}
+						});
+					}
+					else{
+						
+						if (result.get().equals("")){
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("EMPTY");
+							alert.setContentText("Empty string is illegal. Enter some text.");
+							alert.showAndWait().ifPresent(rs -> {
+								if (rs == ButtonType.OK) {
+									System.out.println("null string");
+								}
+							});
+						}
+						else{
+							noteBook.createTextNote(currentFolder, result.get(), "");
+							updateListView(curFolder, true);
+						}
+					}
+				}
+				else{
+					
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("SURE?");
+					alert.setContentText("Wanna exit?");
+					alert.showAndWait().ifPresent(rs -> {
+						if (rs == ButtonType.OK) {
+							System.out.println("cancelled creation");
+						}
+					});
+
+				}
+			}
+
+		});
 
 		vbox.getChildren().add(new Label("Choose folder: "));
 		vbox.getChildren().add(foldersComboBox);
@@ -350,13 +436,15 @@ public class NoteBookWindow extends Application {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(10, 10, 10, 10));
-		textAreaNote.setEditable(false);
+		HBox newHBox = anotherHBox();
+		textAreaNote.setEditable(true);
 		textAreaNote.setMaxSize(450, 400);
 		textAreaNote.setWrapText(true);
 		textAreaNote.setPrefWidth(450);
 		textAreaNote.setPrefHeight(400);
-
-		grid.add(textAreaNote, 0, 0);
+		
+		grid.add(newHBox, 0, 0);
+		grid.add(textAreaNote, 0, 1);
 
 		return grid;
 	}
