@@ -21,7 +21,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -30,17 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.scene.control.Alert; 
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -209,13 +198,51 @@ public class NoteBookWindow extends Application {
 		saveView.setFitHeight(18);
 		saveView.setFitWidth(18);
 		saveView.setPreserveRatio(true);
+		
 		Button saveNote = new Button("Save Note");
+		saveNote.setOnAction(new EventHandler<ActionEvent>() {  
+			@Override public void handle(ActionEvent event) { 
+				if(!curNote.getTitle().equals("") && !currentFolder.equals("")){
+					curNote.setContent(textAreaNote.getText());
+				}
+				else{
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("FAILED");
+					alert.setContentText("sorry, please try again!");
+					alert.showAndWait().ifPresent(rs -> {
+						if (rs == ButtonType.OK) {
+							System.out.println("Failed");
+						}
+					});
+				}
+				
+			}
+		});
 		
 		ImageView delView = new ImageView(new Image(new File("file:///Users/axellegupta/Git/comp3021Lab/src/ui/delete.png").toURI().toString()));
 		delView.setFitHeight(18);
 		delView.setFitWidth(18);
 		delView.setPreserveRatio(true);
 		Button delNote = new Button("Delete Note");
+		delNote.setOnAction(new EventHandler<ActionEvent>() {  
+			@Override public void handle(ActionEvent event) { 
+				if(!curNote.getTitle().equals("") && !currentFolder.equals("")){
+					curFolder.removeNotes(curNote.getTitle());
+					updateListView(curFolder, false);
+				}
+				else{
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("FAILED");
+					alert.setContentText("sorry, please try again!");
+					alert.showAndWait().ifPresent(rs -> {
+						if (rs == ButtonType.OK) {
+							System.out.println("Failed");
+						}
+					});
+				}
+				
+			}
+		});
 		
 		hbox.getChildren().addAll(saveView,saveNote, delView, delNote);
 		return hbox;
@@ -259,18 +286,16 @@ public class NoteBookWindow extends Application {
 				// This is the selected title
 				// TODO load the content of the selected note in
 				// textAreNote
-				TextNote newNote = new TextNote(title);
-
 				for (Note tNote: curFolder.getNotes()){
 					if(tNote.getTitle().equals(title)){
 						if (tNote instanceof TextNote){
-							newNote = (TextNote) tNote;
+							curNote = (TextNote) tNote;
 						}
 					}
 				}
 
 
-				String content = newNote.getContent();
+				String content = curNote.getContent();
 				textAreaNote.setText(content);
 
 			}
@@ -412,7 +437,6 @@ public class NoteBookWindow extends Application {
 	private void updateListView(Folder fold, boolean search) {
 		ArrayList<String> list = new ArrayList<String>();
 		List<Note> notes = fold.searchNotes(currentSearch);
-
 
 		for(Note t: notes){
 			if(t instanceof TextNote){
