@@ -51,7 +51,6 @@ public class Note implements Comparable<Note>, Serializable{
 		return true;
 	}
 
-	@Override
 	public int compareTo(Note o) {
 		int compare = o.getDate().compareTo(this.date);
 		
