@@ -3,6 +3,7 @@ package base;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Folder implements Comparable<Folder>, Serializable{
@@ -149,9 +150,13 @@ public class Folder implements Comparable<Folder>, Serializable{
 	
 	public boolean removeNotes(String title) {
 		boolean remove = false;
-		for(Note n: this.notes){
-			if(n.getTitle().equals(title)){
-				notes.remove(n);
+
+		Iterator<Note> iter = notes.iterator();
+
+		while (iter.hasNext()) {
+		    Note n = iter.next();
+			if(n.getTitle().equals(title) && (n instanceof TextNote)){
+				iter.remove();
 				remove=true;
 			}
 		}
