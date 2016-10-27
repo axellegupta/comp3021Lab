@@ -227,8 +227,20 @@ public class NoteBookWindow extends Application {
 		delNote.setOnAction(new EventHandler<ActionEvent>() {  
 			@Override public void handle(ActionEvent event) { 
 				if(!curNote.getTitle().equals("") && !currentFolder.equals("")){
-					curFolder.removeNotes(curNote.getTitle());
+					boolean removed = curFolder.removeNotes(curNote.getTitle());
+					if(removed){
 					updateListView(curFolder, false);
+					}
+					else{
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Nothing To Remove");
+						alert.setContentText("sorry, no such note exists!");
+						alert.showAndWait().ifPresent(rs -> {
+							if (rs == ButtonType.OK) {
+								System.out.println("Failed");
+							}
+						});
+					}
 				}
 				else{
 					Alert alert = new Alert(AlertType.WARNING);
