@@ -219,7 +219,7 @@ public class NoteBookWindow extends Application {
 			}
 		});
 		
-		ImageView delView = new ImageView(new Image(new File("file:///Users/axellegupta/Git/comp3021Lab/src/ui/delete.png").toURI().toString()));
+		ImageView delView = new ImageView(new Image(new File("delete.png").toURI().toString()));
 		delView.setFitHeight(18);
 		delView.setFitWidth(18);
 		delView.setPreserveRatio(true);
@@ -270,7 +270,7 @@ public class NoteBookWindow extends Application {
 		}
 		foldersComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 			@Override
-			public void changed(ObservableValue ov, Object t, Object t1) {
+			public void changed(ObservableValue<?> ov, Object t, Object t1) {
 				currentFolder = t1.toString();
 				// this contains the name of the folder selected
 				// TODO update listview
