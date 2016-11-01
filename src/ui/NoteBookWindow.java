@@ -191,12 +191,17 @@ public class NoteBookWindow extends Application {
 	private HBox anotherHBox() {
 
 		HBox hbox = new HBox();
-		hbox.setPadding(new Insets(15, 12, 15, 12));
+		hbox.setPadding(new Insets(8, 8, 8, 8));
 		hbox.setSpacing(10); // Gap between nodes
-
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(0, 0, 0, 0));
+		grid.setVgap(8);
+		grid.setHgap(8);
+		
 		ImageView saveView = new ImageView(new Image(new File("save.png").toURI().toString()));
-		saveView.setFitHeight(18);
-		saveView.setFitWidth(18);
+		saveView.setFitHeight(25);
+		saveView.setFitWidth(25);
 		saveView.setPreserveRatio(true);
 		
 		Button saveNote = new Button("Save Note");
@@ -218,10 +223,11 @@ public class NoteBookWindow extends Application {
 				
 			}
 		});
+
 		
 		ImageView delView = new ImageView(new Image(new File("delete.png").toURI().toString()));
-		delView.setFitHeight(18);
-		delView.setFitWidth(18);
+		delView.setFitHeight(25);
+		delView.setFitWidth(25);
 		delView.setPreserveRatio(true);
 		Button delNote = new Button("Delete Note");
 		delNote.setOnAction(new EventHandler<ActionEvent>() {  
@@ -256,7 +262,13 @@ public class NoteBookWindow extends Application {
 			}
 		});
 		
-		hbox.getChildren().addAll(saveView,saveNote, delView, delNote);
+		grid.add(saveView, 0, 0);
+		grid.add(saveNote, 1, 0);
+		grid.add(new Label("\t"), 2, 0);
+		grid.add(delView, 3, 0);
+		grid.add(delNote, 4, 0);
+		
+		hbox.getChildren().addAll(grid);
 		return hbox;
 	}
 
@@ -265,6 +277,13 @@ public class NoteBookWindow extends Application {
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(10)); // Set all sides to 10
 		vbox.setSpacing(8); // Gap between nodes
+		
+		Button addFolder = new Button("Add Folder");
+		addFolder.setPrefSize(100, 10);
+
+		Button addNote = new Button("Add Note");
+		addNote.setPrefSize(100,  10);
+		
 		for(Folder f: noteBook.getFolders()){
 			foldersComboBox.getItems().addAll(f.getName());
 		}
@@ -312,7 +331,6 @@ public class NoteBookWindow extends Application {
 
 			}
 		});
-		Button addFolder = new Button("Add Folder");
 
 		addFolder.setOnAction(new EventHandler<ActionEvent>() {  
 			@Override public void handle(ActionEvent event) { 
@@ -375,7 +393,6 @@ public class NoteBookWindow extends Application {
 		});
 
 
-		Button addNote = new Button("Add Note");
 		addNote.setOnAction(new EventHandler<ActionEvent>() {  
 			@Override public void handle(ActionEvent event) { 
 
@@ -386,7 +403,7 @@ public class NoteBookWindow extends Application {
 				//Traditional way to get the response value.
 				Optional<String> result = dialog.showAndWait();
 				if (result.isPresent()){
-					Boolean exists = false;
+					boolean exists = false;
 					for(Note n: curFolder.getNotes()){
 						if (n.getTitle().equals(result.get()))
 						{exists = true;}
@@ -435,13 +452,28 @@ public class NoteBookWindow extends Application {
 			}
 
 		});
+		
+		GridPane gridFolder = new GridPane();
+		gridFolder.setPadding(new Insets(10, 10, 10, 10));
+		gridFolder.setVgap(5);
+		gridFolder.setHgap(5);
+		 
+		gridFolder.add(foldersComboBox, 0, 0);
+		gridFolder.add(addFolder, 1, 0);
+		
+		GridPane gridNotes = new GridPane();
+		gridNotes.setPadding(new Insets(10, 10, 10, 10));
+		gridNotes.isResizable();
+		gridNotes.setVgap(5);
+		gridNotes.setHgap(5);
+		
+		gridNotes.add(titleslistView, 0, 0);
+		gridNotes.add(addNote, 0, 1);
 
 		vbox.getChildren().add(new Label("Choose folder: "));
-		vbox.getChildren().add(foldersComboBox);
-		vbox.getChildren().add(addFolder);
-		vbox.getChildren().add(new Label("Choose note title"));
-		vbox.getChildren().add(titleslistView);
-		vbox.getChildren().add(addNote);
+		vbox.getChildren().addAll(gridFolder);
+		vbox.getChildren().add(new Label("Choose note (title): "));
+		vbox.getChildren().addAll(gridNotes);
 
 		return vbox;
 	}
