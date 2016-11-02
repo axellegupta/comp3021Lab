@@ -40,10 +40,13 @@ public class PokemonSreenLAB9 extends Application {
 	private static final String left = new File("icons/left.png").toURI().toString();
 	private static final String right = new File("icons/right.png").toURI().toString();
 	// pika image is in icons/25.png
+	private static final String pika = new File("icons/pikachu.gif").toURI().toString();
 
 	private ImageView avatar;
 	private Image avatarImage;
 
+	private ImageView pikachu;
+	private Image pikachuImage;
 
 	// these booleans correspond to the key pressed by the user
 	boolean goUp, goDown, goRight, goLeft;
@@ -63,12 +66,45 @@ public class PokemonSreenLAB9 extends Application {
 		avatar.setFitHeight(STEP_SIZE);
 		avatar.setFitWidth(STEP_SIZE);
 		avatar.setPreserveRatio(true);
-		currentPosx = 0; // this should be a random position
-		currentPosy = 0; // this should be a random position
+		
+		pikachuImage = new Image(pika);
+		pikachu = new ImageView(pikachuImage);
+		pikachu.setFitHeight(STEP_SIZE);
+		pikachu.setFitWidth(STEP_SIZE);
+		pikachu.setPreserveRatio(true);
+		pikachu.setVisible(false);
+		
+//		int curX = 0;
+//		int curY = 0;		
+//		
+//		while (curX==0)
+//		{
+//			int temp = (((new Random()).nextInt(W)+0));
+//			if (temp/STEP_SIZE==0)
+//			{
+//				curX = temp;
+//				break;
+//			}
+//		}
+//		
+//		while (curY==0)
+//		{
+//			int temp = (((new Random()).nextInt(H)+0));
+//			if (temp/STEP_SIZE==0)
+//			{
+//				curY = temp;
+//				break;
+//			}
+//		}
+
+		currentPosx = ((new Random()).nextInt(W/STEP_SIZE))*STEP_SIZE; // this should be a random position
+		currentPosy = ((new Random()).nextInt(H/STEP_SIZE))*STEP_SIZE; // this should be a random position
 
 		Group mapGroup = new Group();
 		avatar.relocate(currentPosx, currentPosy);
-		mapGroup.getChildren().add(avatar);
+		pikachu.relocate(currentPosx+STEP_SIZE, currentPosy+STEP_SIZE);
+		
+		mapGroup.getChildren().addAll(avatar, pikachu);
 
 		// create scene with W and H and color of backgorund
 		Scene scene = new Scene(mapGroup, W, H, Color.SANDYBROWN);
@@ -168,6 +204,8 @@ public class PokemonSreenLAB9 extends Application {
 		final double cy = avatar.getBoundsInLocal().getHeight() / 2;
 
 		if (x - cx >= 0 && x + cx <= W && y - cy >= 0 && y + cy <= H) {
+			pikachu.setVisible(true);
+			pikachu.relocate(currentPosx, currentPosy);
             // relocate ImageView avatar
 			avatar.relocate(x - cx, y - cy);
 			//update position

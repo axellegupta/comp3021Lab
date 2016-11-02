@@ -1,16 +1,18 @@
 package test;
 
 import static org.junit.Assert.*;
+import org.junit.runners.JUnit4;
 
 import java.util.HashSet;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import base.Note;
 import base.NoteBook;
 import base.TextNote;
-
+@RunWith(JUnit4.class)
 public class JUnitTest {
 
 	@Test
