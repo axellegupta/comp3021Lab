@@ -27,14 +27,17 @@ public class RacyCounter {
 			System.out.println("there is a race condition the counter is " + counter + " but it should be " + ITERATIONS * 2);
 
 	}
-
+	
 	private class MyTask implements Runnable{
+
 		@Override
 		public void run(){
 			for (int i = 0; i < ITERATIONS; i++) {
 				//add synchronization here
-				int temp = counter;
-				counter = temp +1;
+				synchronized(RacyCounter.class){
+					int temp = counter;
+					counter = temp +1;
+				}
 			}
 		}
 	}
